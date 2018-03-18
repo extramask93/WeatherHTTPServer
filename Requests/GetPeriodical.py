@@ -21,7 +21,7 @@ class GetPeriodical(Resource):
             db.ChangeDatabase(session['username'])
             dict = {'day': 1, 'week': 7, '3days': 3, 'month': 31, '3months': 93, 'year': 365}
             minmax = " select timestampdiff(second,min,max) div {0} as seconds from (select min(measurementDate) as min, max(measurementDate) as max" \
-                     " from measurements where measurementDate > DATE_SUB(NOW(), INTERVAL {1} DAY)) as dupa".format(nrOfintervals, dict[period])
+                     " from measurements where measurementDate > DATE_SUB(NOW(), INTERVAL {1} DAY) and StationID = {2}) as temp".format(nrOfintervals, dict[period],station)
             seconds = int(db.RunCommand(minmax)[0][0])
             az = ("select StationID,avg({0}) as {0}, convert(min(measurementDate),datetime) as time from measurements"
                   " where measurementDate between date_sub(now(), interval {1} day) and now() and StationID={2}"

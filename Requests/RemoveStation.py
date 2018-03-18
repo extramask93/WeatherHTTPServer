@@ -14,6 +14,7 @@ class RemoveStation(Resource):
         try:
             db = DatabaseUtility()
             db.ChangeDatabase(session['username'])
+            db.RunCommand("DELETE FROM measurements where StationID = %s", (_stationID,))
             db.RunCommand("DELETE FROM stations WHERE StationID = (%s)", (_stationID,))
             return {'message': 'OK'}, 200
         except DBException as e:

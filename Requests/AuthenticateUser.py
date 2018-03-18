@@ -22,6 +22,4 @@ class AuthenticateUser(Resource):
                 session['username'] = str(data[0][1])
                 return {'message':'OK'},200
         except:
-            pass
-        finally:
             return {'message': 'Wrong username or password'}, 400

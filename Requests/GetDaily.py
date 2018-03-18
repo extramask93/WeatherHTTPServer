@@ -15,12 +15,15 @@ class GetDaily(Resource):
 
             db = DatabaseUtility()
             db.ChangeDatabase(session['username'])
-            if(dateEnd is None):
-                rows = db.RunCommand("SELECT * from measurements WHERE measurementDate >= (%s) AND StationID = (%s)" ,
-                                     (dateStart,station))
-            else:
-                rows = db.RunCommand("SELECT * from measurements WHERE measurementDate BETWEEN (%s) AND (%s) "
-                                     "AND StationID = (%s)", (dateStart, dateEnd, station))
+            rows = db.RunCommand("select * from measurements where StationID = (%s) and measurementDate ="
+                                 "(select max(measurementDate)from measurements where measurementDate > "
+                                 "date_sub(now(), interval 1 day) and StationID = (%s))",(station,station))
+            #if(dateEnd is None):
+            #    rows = db.RunCommand("SELECT * from measurements WHERE measurementDate >= (%s) AND StationID = (%s)" ,
+             #                        (dateStart,station))
+            #else:
+             #   rows = db.RunCommand("SELECT * from measurements WHERE measurementDate BETWEEN (%s) AND (%s) "
+             #                        "AND StationID = (%s)", (dateStart, dateEnd, station))
         except DBException as e:
             return {'message': e.msg}, 400
         try:
