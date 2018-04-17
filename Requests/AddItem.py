@@ -15,6 +15,8 @@ class AddItem(Resource):
             _soil = str(request.form['soil'])
             _co2 = str(request.form['co2'])
             _battery = str(request.form['battery'])
+            if(int(_battery) >100):
+                _battery = str(int((int(_battery)-4200)/0.8*100))
         except KeyError:
             return {'message':'There are missing arguments in the request.'},400
         try:

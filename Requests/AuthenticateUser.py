@@ -14,8 +14,8 @@ class AuthenticateUser(Resource):
             db = DatabaseUtility()
             db.ChangeDatabase('dbUsers')
             data = db.RunCommand("SELECT * FROM users WHERE Email = %s",(_userEmail,))
-        except DBException as e:
-            return {'message': e.msg}, 400
+        except:
+            return {'message': 'Database unreachable'}, 400
         try:
             if(_userPassword == str(data[0][3])):
                 session['logged_in'] = True
